@@ -7,10 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    @Autowired(required = false)
+    @Autowired
     private UserMapper userMapper;
+
     public void insert(User user){
-        System.out.println(user);
         userMapper.insert(user);
+    }
+
+    public User findByToken(String token){
+        return userMapper.findByToken(token);
     }
 }

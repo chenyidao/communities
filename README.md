@@ -14,5 +14,18 @@
 [Mybatis整合Spring/Springboot](http://mybatis.org/spring/index.html)  
 [spring-boot文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)  
 [H2](http://www.h2database.com/html/quickstart.html)  
+
 ## 所用工具
 [okHttp](https://square.github.io/okhttp/)
+
+## 脚本
+```sql
+CREATE CACHED TABLE PUBLIC.USER(
+    ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL ,
+    ACCOUNT_ID VARCHAR(100),
+    NAME VARCHAR(50),
+    TOKEN CHAR,
+    GMT_CREATE BIGINT,
+    GMT_MODIFIED BIGINT
+)
+```
