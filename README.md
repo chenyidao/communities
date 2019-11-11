@@ -18,13 +18,14 @@
 ## 插件
 [集成Flyway Migration](https://flywaydb.org/getstarted/firststeps/maven)  
 [集成Flyway Migration简单实例](http://ju.outofmemory.cn/entry/339528)
+
 ## 所用工具
 [okHttp](https://square.github.io/okhttp/)
 
 ## 脚本
 ```sql
 CREATE TABLE USER(
-    ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL ,
+    ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     ACCOUNT_ID VARCHAR(100),
     NAME VARCHAR(50),
     TOKEN CHAR,
