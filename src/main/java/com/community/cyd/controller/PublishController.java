@@ -20,6 +20,7 @@ public class PublishController {
     private UserService userService;
     @Autowired
     private QuestionService questionService;
+
     @GetMapping("/publish")
     public String publish() {
         return "publish";
@@ -35,33 +36,34 @@ public class PublishController {
 
         User user = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if ("token".equals(cookie.getName())){
-                String value = cookie.getValue();
-                user = userService.findByToken(value);
-                if (user != null) {
-                    request.getSession().setAttribute("user", user);
+        if (cookies != null && cookies.length != 0)
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    String value = cookie.getValue();
+                    user = userService.findByToken(value);
+                    if (user != null) {
+                        request.getSession().setAttribute("user", user);
+                    }
+                    break;
                 }
-                break;
             }
-        }
         model.addAttribute("tag", tag);
         model.addAttribute("description", description);
         model.addAttribute("title", title);
         if (user == null) {
-            model.addAttribute("error","用户未登录");
+            model.addAttribute("error", "用户未登录");
             return "publish";
         }
         if (title == null || title == "") {
-            model.addAttribute("error","标题不能为空");
+            model.addAttribute("error", "标题不能为空");
             return "publish";
         }
         if (description == null || description == "") {
-            model.addAttribute("error","描述不能为空");
+            model.addAttribute("error", "描述不能为空");
             return "publish";
         }
         if (tag == null || tag == "") {
-            model.addAttribute("error","标签不能为空");
+            model.addAttribute("error", "标签不能为空");
             return "publish";
         }
         Question question = new Question();

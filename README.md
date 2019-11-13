@@ -16,9 +16,10 @@
 [H2](http://www.h2database.com/html/quickstart.html)  
 
 ## 插件
-[集成Flyway Migration](https://flywaydb.org/getstarted/firststeps/maven)  
-[集成Flyway Migration简单实例](http://ju.outofmemory.cn/entry/339528)
-
+[Flyway](https://flywaydb.org/getstarted/firststeps/maven)  
+[Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  
+[Lombok maven](https://projectlombok.org/setup/maven)
+[Lombok](https://projectlombok.org/features/all)  
 ## 所用工具
 [okHttp](https://square.github.io/okhttp/)
 
