@@ -2,7 +2,7 @@ package com.community.cyd.dto;
 
 public class GithubUser {
     private String name;// 用户名
-    private long id;    // 用户id
+    private Long id;    // 用户id
     private String bio; // 描述
 
     public String getName() {
@@ -13,7 +13,7 @@ public class GithubUser {
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
