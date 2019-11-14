@@ -21,6 +21,8 @@
 [Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  
 [Lombok maven](https://projectlombok.org/setup/maven)
 [Lombok](https://projectlombok.org/features/all)  
+[IDEA热部署Automatic Restart](https://www.cnblogs.com/ming-blogs/p/10289075.html)(清除浏览器缓存：ctrl+shift+delete)
+
 ## 所用工具
 [okHttp](https://square.github.io/okhttp/)
 
