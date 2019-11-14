@@ -12,8 +12,9 @@
 [thymeleaf基本用法](https://www.cnblogs.com/topwill/p/7434955.html)  
 [UML图](https://mp.weixin.qq.com/s/KR2HCcCoIc-gSDLZ69azYw)  
 [Mybatis整合Spring/Springboot](http://mybatis.org/spring/index.html)  
-[spring-boot文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)  
+[spring-boot文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/)  
 [H2](http://www.h2database.com/html/quickstart.html)  
+[Thymeleaf使用文档](https://www.thymeleaf.org/documentation.html)
 
 ## 插件
 [Flyway](https://flywaydb.org/getstarted/firststeps/maven)  

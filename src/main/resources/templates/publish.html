@@ -17,7 +17,7 @@
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">nue-社区</span>
             </button>
-            <a class="navbar-brand" href="#">nue-社区</a>
+            <a class="navbar-brand" href="/">nue-社区</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -61,7 +61,7 @@
 
                 <div class="form-group">
                     <label for="title">问题补充（必填，请参照右侧提示）:</label>
-                    <textarea name="description" class="form-control" th:value="${description}" id="description" cols="30" rows="10"></textarea>
+                    <textarea name="description" class="form-control" th:text="${description}" id="description" cols="30" rows="10"></textarea>
                 </div>
 
                 <div class="form-group">

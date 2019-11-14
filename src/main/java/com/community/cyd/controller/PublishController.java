@@ -66,11 +66,14 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
+
+        //问题：这里的user中的accountId为null？？？
+
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setId(user.getId());
+        question.setCreator(user.getId()); //通过user的Id与question的creator关联
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         questionService.create(question);
