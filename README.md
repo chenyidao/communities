@@ -14,8 +14,8 @@
 [Mybatis整合Spring/Springboot](http://mybatis.org/spring/index.html)  
 [spring-boot文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/)  
 [H2](http://www.h2database.com/html/quickstart.html)  
-[Thymeleaf使用文档](https://www.thymeleaf.org/documentation.html)
-
+[Thymeleaf使用文档](https://www.thymeleaf.org/documentation.html)  
+[html转译与反转译](https://www.sojson.com/rehtml)
 ## 插件
 [Flyway](https://flywaydb.org/getstarted/firststeps/maven)  
 [Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  
@@ -36,4 +36,17 @@ CREATE TABLE USER(
     GMT_CREATE BIGINT,
     GMT_MODIFIED BIGINT
 );
+```
+```sql
+select *
+from table_name 
+[LIMIT N],[ OFFSET M]
+
+-- range        page(页码)  offset(偏移量)           size(每页大小)
+-- 0-5(0,5)     1           N = size * (page - 1)    5
+-- 6-10(5,5)    2            
+-- 11-15(10,5)   
+    M = 5
+    N = size * (page - 1)
+    pageCount(页数) = total % offset = 0 ? total/offset : total/offset+1            
 ```
