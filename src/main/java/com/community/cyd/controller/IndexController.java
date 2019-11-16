@@ -1,7 +1,6 @@
 package com.community.cyd.controller;
 
 import com.community.cyd.dto.PaginationDTO;
-import com.community.cyd.dto.QuestionDTO;
 import com.community.cyd.model.User;
 import com.community.cyd.service.QuestionService;
 import com.community.cyd.service.UserService;
@@ -14,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+/****
+ * 首页
+ */
 @Controller
 public class IndexController {
     @Autowired
