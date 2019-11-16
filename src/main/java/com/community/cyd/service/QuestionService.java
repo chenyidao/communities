@@ -24,7 +24,7 @@ public class QuestionService {
         questionMapper.create(question);
     }
 
-    //获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等）
+    //获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
     public PaginationDTO questionList(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = questionMapper.count();
@@ -81,9 +81,6 @@ public class QuestionService {
         }
         paginationDTO.setPaginationDTO(totalPage, page); //设置返回前端显示的内容
 
-        /**
-         * 问题：当page < 0 时 以及 page > totalPage时 查询不到questionList ???
-         **/
         Integer offset = size * (page - 1);    //select * from question limit offset,size 获取偏移量
 
         List<Question> questionList = questionMapper.getListByUserId(userId, offset, size);

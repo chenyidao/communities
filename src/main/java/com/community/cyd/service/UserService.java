@@ -10,11 +10,22 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public void insert(User user){
-        userMapper.insert(user);
+    public User findByToken(String token) {
+        return userMapper.findByToken(token);
     }
 
-    public User findByToken(String token){
-        return userMapper.findByToken(token);
+    public void insertOrUpdate(User user) {
+        User dbUser = userMapper.findByAccountId(user.getAccountId());
+        if (dbUser == null) {
+            //插入
+            userMapper.insert(user);
+        } else {
+            //更新
+            dbUser.setToken(user.getToken());   //换token标识
+            dbUser.setAvatarUrl(user.getAvatarUrl());   //换头像
+            dbUser.setGmtModified(System.currentTimeMillis());  //更改时间
+            dbUser.setName(user.getName());  //改名
+            userMapper.update(dbUser);
+        }
     }
 }

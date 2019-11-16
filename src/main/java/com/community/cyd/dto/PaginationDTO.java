@@ -21,6 +21,12 @@ public class PaginationDTO {
         this.page = page;
         this.totalPage = totalPage;
         pages = new ArrayList<>();
+
+        //如果没有数据或数据少于1页，则不显示下面的按钮
+        if (totalPage <= 1) {
+            return;
+        }
+
         pages.add(page);
 
         //展示当前的与其前后3个（如果前面的页少于3则只显示有的，后面的也是如此）
