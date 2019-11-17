@@ -20,10 +20,6 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public void create(Question question) {
-        questionMapper.create(question);
-    }
-
     //获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
     public PaginationDTO questionList(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -95,5 +91,27 @@ public class QuestionService {
         }
         paginationDTO.setQuestions(questionDTOList);
         return paginationDTO;
+    }
+
+    //通过id获取该questionDTO
+    public QuestionDTO getById(Integer id) {
+        Question question = questionMapper.getById(id);
+        User user = userMapper.findById(question.getCreator());
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
+
+    //创建或者更新问题
+    public void createOrUpdate(Question question) {
+        if (question.getId() == null) {
+            //插入
+            questionMapper.create(question);
+        } else {
+            //更新
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.update(question);
+        }
     }
 }

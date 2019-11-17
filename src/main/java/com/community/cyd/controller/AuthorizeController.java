@@ -16,10 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
+/**
+ * 授权登陆
+ * **/
 @Controller
 public class AuthorizeController {
 
-    @Autowired(required = false)
+    @Autowired
     private GithubProvider githubProvider;
 
     @Value("${github.client.id}")
@@ -31,7 +34,7 @@ public class AuthorizeController {
     @Value("${github.client.uri}")
     private String redirectUrl;
 
-    @Autowired(required = false)
+    @Autowired
     private UserService userService;
 
     //获取信息并回调  登陆
@@ -67,7 +70,7 @@ public class AuthorizeController {
         }
     }
 
-    //登出
+    //退出登陆
     @GetMapping("/logout")
     public String logout(HttpServletRequest request,
                          HttpServletResponse response) {
