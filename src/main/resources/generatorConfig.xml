@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--需要修改的部分为：
+    a、数据库驱动架包文件位置，即mysql-connector-java-x.jar架包位置，可以在maven仓库中查找，或者自己单独下载都可以。
+    b、数据库的url以及用户名密码等。
+    c、生成模型的包名和位置。
+    d、生成映射文件的包名和位置。
+    e、生成DAO的包名和位置。
+    f、添加要生成的表。-->
+
+    <!-- <generatorConfiguration> 配置文件的根属性，放在最外层 -->
+    <!-- <classPathEntry> 指定数据库驱动的jdbc驱动jar包的位置 -->
+    <!-- <columnOverride> -->
+    <!-- <columnRenamingRule> -->
+    <!-- <commentGenerator> -->
+    <!-- <connectionFactory> -->
+    <!-- <context> -->
+    <!-- <domainObjectRenamingRule> -->
+    <!-- <except> -->
+    <!-- <generatedKey> -->
+    <!-- <ignoreColumn> -->
+    <!-- <ignoreColumnsByRegex> -->
+    <!-- <javaClientGenerator> -->
+    <!-- <javaModelGenerator> -->
+    <!-- <javaTypeResolver  类型转换：将数据库中类型转换为Java中的类型   属性：type> -->
+    <!-- <jdbcConnection> 数据库连接配置  属性：driverClass，connectionURL，userId，password-->
+    <!-- <plugin> -->
+    <!-- <properties> -->
+    <!-- <property> -->
+    <!-- <sqlMapGenerator> -->
+    <!-- <table> -->
+
+
+    <!-- 指定数据库驱动的jdbc驱动jar包的位置 -->
+    <!-- <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+
+    <!-- context 是逆向工程的主要配置信息 -->
+    <!-- id：起个名字 -->
+    <!-- targetRuntime：设置生成的文件适用于那个 mybatis 版本 -->
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+        <jdbcConnection driverClass="org.h2.Driver"
+                        connectionURL="jdbc:h2:~/communities"
+                        userId="sa"
+                        password="123">
+        </jdbcConnection>
+
+        <!--非必须，类型处理器，在数据库类型和java类型之间的转换控制-->
+        <javaTypeResolver >
+            <!-- 默认情况下数据库中的 decimal，bigInt 在 Java 对应是 sql 下的 BigDecimal 类 -->
+            <!-- 不是 double 和 long 类型 -->
+            <!-- 使用常用的基本类型代替 sql 包下的引用类型 -->
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!-- targetPackage：生成的实体类所在的包 -->
+        <!-- targetProject：生成的实体类所在的硬盘位置 -->
+        <javaModelGenerator targetPackage="com.community.cyd.model" targetProject="src/main/java">
+            <!-- 是否允许子包 -->
+            <property name="enableSubPackages" value="true" />
+            <!-- 是否清理从数据库中查询出的字符串左右两边的空白字符 -->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!-- targetPackage 和 targetProject：生成的 mapper.xml 文件的包和位置 -->
+        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">
+            <!-- 针对 oracle 数据库的一个配置，是否把 schema 作为字包名 -->
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!-- targetPackage 和 targetProject：生成的 mapper.java interface 文件的包和位置 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.community.cyd.mapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!-- 要生成的表  tableName是数据库中的表名或视图名  domainObjectName是实体类名-->
+        <!-- 多个实体类复制多份该配置即可 -->
+        <table tableName="user" domainObjectName="User" >
+            <!--<property name="useActualColumnNames" value="true"/>   &lt;!&ndash;转换位驼峰标识&ndash;&gt;
+            <generatedKey column="ID" sqlStatement="DB2" identity="true" />
+            <columnOverride column="DATE_FIELD" property="startDate" />
+            <ignoreColumn column="FRED" />
+            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
+        </table>
+        <table tableName="question" domainObjectName="Question">
+        </table>
+
+    </context>
+</generatorConfiguration>

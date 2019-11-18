@@ -21,8 +21,9 @@
 [Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  
 [Lombok maven](https://projectlombok.org/setup/maven)
 [Lombok](https://projectlombok.org/features/all)  
-[IDEA热部署Automatic Restart](https://www.cnblogs.com/ming-blogs/p/10289075.html)(清除浏览器缓存：ctrl+shift+delete)
-
+[IDEA热部署Automatic Restart](https://www.cnblogs.com/ming-blogs/p/10289075.html)(清除浏览器缓存：ctrl+shift+delete)  
+[Mybatis Generator](http://mybatis.org/generator/configreference/xmlconfig.html)  
+[Mybatis Generator分页插件](http://mybatis.org/generator/reference/plugins.html)
 ## 所用工具
 [okHttp](https://square.github.io/okhttp/)
 
@@ -49,4 +50,17 @@ from table_name
     M = 5
     N = size * (page - 1)
     pageCount(页数) = total % offset = 0 ? total/offset : total/offset+1            
+```
+
+``` bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+```
+
+```
+windows用\  mac用/  不然运行成功了还是没有文件生成？
+```
+
+```aidl
+generator分页插件：<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
 ```
