@@ -80,7 +80,7 @@ public class PublishController {
         }
 
         //问题：这里的user中的accountId为null？？？  未开启驼峰式命名配置
-        //问题存在则更新，不存在则删除
+        //问题存在则更新，不存在则插入
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);

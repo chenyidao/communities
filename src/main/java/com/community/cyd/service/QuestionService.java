@@ -2,6 +2,9 @@ package com.community.cyd.service;
 
 import com.community.cyd.dto.PaginationDTO;
 import com.community.cyd.dto.QuestionDTO;
+import com.community.cyd.exception.CustomizeErrorCode;
+import com.community.cyd.exception.CustomizeException;
+import com.community.cyd.mapper.QuestionExtendMapper;
 import com.community.cyd.mapper.QuestionMapper;
 import com.community.cyd.mapper.UserMapper;
 import com.community.cyd.model.Question;
@@ -22,10 +25,13 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private QuestionExtendMapper questionExtendMapper;
+
     //获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
     public PaginationDTO questionList(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         Integer totalPage;
 
         if (totalCount % size == 0) {
@@ -46,7 +52,7 @@ public class QuestionService {
          **/
         Integer offset = size * (page - 1);    //select * from question limit offset,size 获取偏移量
 
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(offset, size));
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //通过question表中的主键id(问题序号)对应 User中id获取user，然后获取头像地址
         for (Question question : questionList) {
@@ -66,7 +72,7 @@ public class QuestionService {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
                 .andCreatorEqualTo(userId);
-        Integer totalCount = (int)questionMapper.countByExample(questionExample);
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
         Integer totalPage;
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -100,6 +106,9 @@ public class QuestionService {
     //通过id获取该questionDTO
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
@@ -111,11 +120,27 @@ public class QuestionService {
     public void createOrUpdate(Question question) {
         if (question.getId() == null) {
             //插入
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         } else {
             //更新
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateByPrimaryKey(question);
+            int updated = questionMapper.updateByPrimaryKey(question); //返回0则失败，返回1则成功
+            if (updated == 0) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
+    }
+
+    /**
+     * 访问次数
+     * **/
+    public void incViewCount(Integer id) {
+        Question question= new Question();
+        question.setId(id);         //因为每次通过id只更新viewCount，所以不需要赋其他属性的值。
+        question.setViewCount(1);   //递增步长为1
+        questionExtendMapper.incViewCount(question);
     }
 }
