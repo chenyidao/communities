@@ -4,4 +4,5 @@ import com.community.cyd.model.Question;
 
 public interface QuestionExtendMapper {
     int incViewCount(Question question);
+    int incCommentCount(Question question);
 }

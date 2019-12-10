@@ -17,6 +17,10 @@ body {
     height: 40px;
 }
 
+.media-body {
+    padding-top: 10px;
+}
+
 .text-desc {
     font-size: 12px;
     font-weight: normal;
@@ -31,12 +35,22 @@ body {
     font-size: 12px;
     color: #999;
 }
+
 .community-question-right {
     margin-left: -1px;
     padding-top: 20px;
-    border-left: 1px solid
-    #e6e6e6;
+    border-left: 1px solid #e6e6e6;
 }
-.community-error{
+
+.community-error {
     margin: 50px;
+}
+
+.community-comment {
+    margin: 10px 0;
+}
+
+.btn-comment {
+    float: right;
+    margin-bottom: 10px;
 }

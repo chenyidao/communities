@@ -1,1 +1,0 @@
-alter table USER alter column ACCOUNT_ID int;

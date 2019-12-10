@@ -16,7 +16,8 @@
 [H2](http://www.h2database.com/html/quickstart.html)  
 [Thymeleaf使用文档](https://www.thymeleaf.org/documentation.html)  
 [html转译与反转译](https://www.sojson.com/rehtml)  
-[ErrorHandler错误处理机制](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-error-handling)
+[ErrorHandler错误处理机制](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-error-handling)  
+[JQuery API文档](https://api.jquery.com/)  
 ## 插件
 [Flyway](https://flywaydb.org/getstarted/firststeps/maven)  
 [Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  
@@ -26,8 +27,8 @@
 [Mybatis Generator](http://mybatis.org/generator/configreference/xmlconfig.html)  
 [Mybatis Generator分页插件](http://mybatis.org/generator/reference/plugins.html)
 ## 所用工具
-[okHttp](https://square.github.io/okhttp/)
-
+[okHttp](https://square.github.io/okhttp/)  
+[json解析工具](http://jsoneditoronline.org/)  
 ## 脚本
 ```sql
 CREATE TABLE USER(
@@ -64,4 +65,21 @@ windows用\  mac用/  不然运行成功了还是没有文件生成？
 
 ```aidl
 generator分页插件：<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+```
+
+```puml
+$.ajax({
+        type: "POST",
+        url: "/comment",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            "parentId": id,
+            "content": content,
+            "type": 1
+        }),
+        success: function (response) {
+            console.log(response)
+        },
+        dataType: "json "
+    });
 ```

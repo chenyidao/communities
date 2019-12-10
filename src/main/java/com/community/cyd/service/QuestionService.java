@@ -14,7 +14,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,10 @@ public class QuestionService {
     @Autowired
     private QuestionExtendMapper questionExtendMapper;
 
-    //获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
+    /**
+     * 获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
+     * **/
+
     public PaginationDTO questionList(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
@@ -47,9 +49,7 @@ public class QuestionService {
         }
         paginationDTO.setPaginationDTO(totalPage, page); //设置返回前端显示的内容
 
-        /**
-         * 问题：当page < 0 时 以及 page > totalPage时 查询不到questionList ???
-         **/
+        //问题：当page < 0 时 以及 page > totalPage时 查询不到questionList ???
         Integer offset = size * (page - 1);    //select * from question limit offset,size 获取偏移量
 
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
@@ -66,8 +66,10 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    //通过userId获取该user发布的问题(与question中的creator关联)
-    public PaginationDTO getListByUserId(Integer userId, Integer page, Integer size) {
+    /**
+     * 通过userId获取该user发布的问题(与question中的creator关联)
+     **/
+    public PaginationDTO getListByUserId(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
@@ -91,11 +93,10 @@ public class QuestionService {
 
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        //通过question表中的主键id(问题序号)对应 User中id获取user，然后获取头像地址
         for (Question question : questionList) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO); //将question属性复制到questionDTO，用于参数传输
+            BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
@@ -103,8 +104,10 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    //通过id获取该questionDTO
-    public QuestionDTO getById(Integer id) {
+    /**
+     * 通过id获取该questionDTO
+     **/
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -116,7 +119,9 @@ public class QuestionService {
         return questionDTO;
     }
 
-    //创建或者更新问题
+    /**
+     * 创建或者更新问题
+     **/
     public void createOrUpdate(Question question) {
         if (question.getId() == null) {
             //插入
@@ -136,9 +141,9 @@ public class QuestionService {
 
     /**
      * 访问次数
-     * **/
-    public void incViewCount(Integer id) {
-        Question question= new Question();
+     **/
+    public void incViewCount(Long id) {
+        Question question = new Question();
         question.setId(id);         //因为每次通过id只更新viewCount，所以不需要赋其他属性的值。
         question.setViewCount(1);   //递增步长为1
         questionExtendMapper.incViewCount(question);

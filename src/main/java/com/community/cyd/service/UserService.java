@@ -17,6 +17,9 @@ public class UserService {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andTokenEqualTo(token);
         List<User> users = userMapper.selectByExample(userExample);
+        if (users == null || users.size() == 0) {
+            return null;
+        }
         return users.get(0);
     }
 
@@ -24,7 +27,7 @@ public class UserService {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
         List<User> users = userMapper.selectByExample(userExample);
-        if (users == null) {
+        if (users == null || users.size() == 0) {
             //插入
             userMapper.insert(user);
         } else {

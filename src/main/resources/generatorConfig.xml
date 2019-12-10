@@ -50,44 +50,44 @@
         </jdbcConnection>
 
         <!--非必须，类型处理器，在数据库类型和java类型之间的转换控制-->
-        <javaTypeResolver >
+        <javaTypeResolver>
             <!-- 默认情况下数据库中的 decimal，bigInt 在 Java 对应是 sql 下的 BigDecimal 类 -->
             <!-- 不是 double 和 long 类型 -->
             <!-- 使用常用的基本类型代替 sql 包下的引用类型 -->
-            <property name="forceBigDecimals" value="false" />
+            <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
         <!-- targetPackage：生成的实体类所在的包 -->
         <!-- targetProject：生成的实体类所在的硬盘位置 -->
         <javaModelGenerator targetPackage="com.community.cyd.model" targetProject="src/main/java">
             <!-- 是否允许子包 -->
-            <property name="enableSubPackages" value="true" />
+            <property name="enableSubPackages" value="true"/>
             <!-- 是否清理从数据库中查询出的字符串左右两边的空白字符 -->
-            <property name="trimStrings" value="true" />
+            <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- targetPackage 和 targetProject：生成的 mapper.xml 文件的包和位置 -->
-        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
             <!-- 针对 oracle 数据库的一个配置，是否把 schema 作为字包名 -->
-            <property name="enableSubPackages" value="true" />
+            <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- targetPackage 和 targetProject：生成的 mapper.java interface 文件的包和位置 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.community.cyd.mapper"  targetProject="src/main/java">
-            <property name="enableSubPackages" value="true" />
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.community.cyd.mapper" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
         <!-- 要生成的表  tableName是数据库中的表名或视图名  domainObjectName是实体类名-->
         <!-- 多个实体类复制多份该配置即可 -->
-        <table tableName="user" domainObjectName="User" >
+        <table tableName="user" domainObjectName="User">
             <!--<property name="useActualColumnNames" value="true"/>   &lt;!&ndash;转换位驼峰标识&ndash;&gt;
             <generatedKey column="ID" sqlStatement="DB2" identity="true" />
             <columnOverride column="DATE_FIELD" property="startDate" />
             <ignoreColumn column="FRED" />
             <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
         </table>
-        <table tableName="question" domainObjectName="Question">
-        </table>
+        <table tableName="question" domainObjectName="Question"></table>
+        <table tableName="comment" domainObjectName="Comment"></table>
 
     </context>
 </generatorConfiguration>

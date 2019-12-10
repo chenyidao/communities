@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  * 调用时间：DispatcherServlet进行视图的渲染之后
  * 多用于清理资源
  **/
+
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
