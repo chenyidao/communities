@@ -13,8 +13,13 @@ function post() {
         }),
         success: function (response) {
             //评论成功，则关闭评论框
-            if (response.code == 200) {
+            /*if (response.code == 200) {
                 $("#comment_section").hide();
+            }*/
+
+            //评论成功，刷新页面
+            if (response.code == 200) {
+                window.location.reload();
             } else {
                 //如果是未登录则确认是否登陆
                 if (response.code == 2003) {

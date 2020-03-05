@@ -27,6 +27,7 @@ public class GithubProvider {
             //string格式为：access_token=3d8c927226052fdab7166d231026538ae8604b95&scope=user&token_type=bearer
             //而我们要获取的是前面的token值
             String token = string.split("&")[0].split("=")[1];
+            System.out.println(token);
             return token;
         } catch (IOException e) {
             e.printStackTrace();

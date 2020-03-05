@@ -16,6 +16,7 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12">
+            <!--正文-->
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <h2 th:text="${question.title}"></h2>
                 <span class="text-desc">
@@ -34,9 +35,39 @@
             </div>
             <hr class="col-lg-12 col-md-12 col-sm-12">
 
-            <div class="col-lg-12 col-md-12 col-sm-12" id="comment_section">
+            <!--回复-->
+            <h4>
+                <span th:text="${question.commentCount}"></span>个回复
+            </h4>
+            <hr class="col-lg-12 col-md-12 col-sm-12 community-sp">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="comment : ${comments}">
+                <!--回复人-->
                 <div class="media community-comment">
                     <div class="media-left ">
+                        <a href="#">
+                            <img class="media-object img-rounded" th:src="${comment.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading">
+                            <span th:text="${comment.user.name}"></span>
+                        </h5>
+                        <div th:text="${comment.content}"></div>
+                        <div class="menu">
+                            <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-comment icon" aria-hidden="true"></span>
+                            <span class="menu-comment-time" th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="col-lg-12 col-md-12 col-sm-12 community-sp">
+            <div class="col-lg-12 col-md-12 col-sm-12" id="comment_section">
+                <!--回复人-->
+                <div class="media community-comment">
+                    <div class="media-left">
                         <a href="#">
                             <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
                         </a>
@@ -47,6 +78,7 @@
                         </h5>
                     </div>
                 </div>
+                <!--回复框-->
                 <textarea class="form-control community-comment" rows="6" id="comment_content"></textarea>
                 <input type="hidden" id="question_id" th:value="${question.id}">
                 <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>

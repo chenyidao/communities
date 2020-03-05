@@ -14,6 +14,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +30,32 @@ public class QuestionService {
 
     /**
      * 获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
-     * **/
+     **/
 
     public PaginationDTO questionList(Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+
+        PaginationDTO paginationDTO = getQuestionList(totalCount, page, size);
+        return paginationDTO;
+    }
+
+    /**
+     * 通过userId获取该user发布的问题(与question中的creator关联)
+     **/
+    public PaginationDTO getListByUserId(Long userId, Integer page, Integer size) {
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria()
+                .andCreatorEqualTo(userId);
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
+        PaginationDTO paginationDTO = getQuestionList(totalCount, page, size);
+        return paginationDTO;
+    }
+
+    /**
+     * 获取question集合 重构核心函数
+     **/
+    public PaginationDTO getQuestionList(Integer totalCount, Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
 
         if (totalCount % size == 0) {
@@ -59,44 +81,6 @@ public class QuestionService {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO); //将question属性复制到questionDTO，用于参数传输
-            questionDTO.setUser(user);
-            questionDTOList.add(questionDTO);
-        }
-        paginationDTO.setQuestions(questionDTOList);
-        return paginationDTO;
-    }
-
-    /**
-     * 通过userId获取该user发布的问题(与question中的creator关联)
-     **/
-    public PaginationDTO getListByUserId(Long userId, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria()
-                .andCreatorEqualTo(userId);
-        Integer totalCount = (int) questionMapper.countByExample(questionExample);
-        Integer totalPage;
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
-        } else {
-            totalPage = totalCount / size + 1;
-        }
-        if (page < 1) {
-            page = 1;
-        }
-        if (page > totalPage) {
-            page = totalPage;
-        }
-        paginationDTO.setPaginationDTO(totalPage, page); //设置返回前端显示的内容
-
-        Integer offset = size * (page - 1);    //select * from question limit offset,size 获取偏移量
-
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
-        for (Question question : questionList) {
-            User user = userMapper.selectByPrimaryKey(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }

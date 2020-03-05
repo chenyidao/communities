@@ -11,7 +11,6 @@
     <script type="application/javascript">
         //加载页面时，如果closable == true，则登陆成功，关闭callback页面，并移除localStorage
         window.onload = function () {
-            debugger;
             var closable = localStorage.getItem("closable");
             if (closable == "true") {
                 window.close();
