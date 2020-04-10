@@ -17,4 +17,5 @@ public class CommentRespDTO {
     private Long gmtCreate;
     private Long gmtModified;
     private User user;
+    private Integer commentCount;
 }

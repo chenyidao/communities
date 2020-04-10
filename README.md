@@ -19,6 +19,7 @@
 [ErrorHandler错误处理机制](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-error-handling)  
 [JQuery API文档](https://api.jquery.com/)  
 [common lang](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.9)  
+[Moment.js—JavaScript 日期处理类库](http://momentjs.cn/)  
 ## 插件
 [Flyway](https://flywaydb.org/getstarted/firststeps/maven)  
 [Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  

@@ -70,6 +70,11 @@ body {
     cursor: pointer;
 }
 
+/*展开二级评论时图标变色*/
+.menu .active {
+    color: #499ef3;
+}
+
 /*鼠标悬浮变色*/
 .menu .icon:hover {
     color: #499ef3;
@@ -78,4 +83,16 @@ body {
 /*评论时间靠右*/
 .menu-comment-time {
     float: right;
+}
+
+.sub-comment {
+    margin-top: 10px;
+    border: 1px solid #eee;
+    padding-top: 15px;
+    border-radius: 5px;
+}
+
+/*问题便签*/
+.question-tag {
+    margin-right: 5px;
 }

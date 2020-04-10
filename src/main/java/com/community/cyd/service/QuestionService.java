@@ -73,8 +73,9 @@ public class QuestionService {
 
         //问题：当page < 0 时 以及 page > totalPage时 查询不到questionList ???
         Integer offset = size * (page - 1);    //select * from question limit offset,size 获取偏移量
-
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //通过question表中的主键id(问题序号)对应 User中id获取user，然后获取头像地址
         for (Question question : questionList) {

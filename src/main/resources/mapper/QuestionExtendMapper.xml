@@ -22,12 +22,14 @@
   </resultMap>
 
   <!--id对应dao接口中的方法名，parameterType对应dao接口中方法的参数类型-->
+  <!--浏览数自增-->
   <update id="incViewCount" parameterType="com.community.cyd.model.Question">
     update QUESTION
     set VIEW_COUNT = VIEW_COUNT + #{viewCount,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
+  <!--评论数自增-->
   <update id="incCommentCount" parameterType="com.community.cyd.model.Question">
     update QUESTION
     set COMMENT_COUNT = COMMENT_COUNT + #{commentCount,jdbcType=INTEGER}

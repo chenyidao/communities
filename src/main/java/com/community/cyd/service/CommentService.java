@@ -4,10 +4,7 @@ import com.community.cyd.dto.CommentRespDTO;
 import com.community.cyd.enums.CommentTypeEnum;
 import com.community.cyd.exception.CustomizeErrorCode;
 import com.community.cyd.exception.CustomizeException;
-import com.community.cyd.mapper.CommentMapper;
-import com.community.cyd.mapper.QuestionExtendMapper;
-import com.community.cyd.mapper.QuestionMapper;
-import com.community.cyd.mapper.UserMapper;
+import com.community.cyd.mapper.*;
 import com.community.cyd.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,10 @@ public class CommentService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CommentExtendMapper commentExtendMapper;
+
     /**
      * 插入评论
      **/
@@ -54,6 +55,11 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+
+            //子评论数+1
+            dbComment.setCommentCount(1);
+            commentExtendMapper.incCommentCount(dbComment);
+
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -62,7 +68,7 @@ public class CommentService {
             }
             //插入评论
             commentMapper.insert(comment);
-            //评论数+1
+            //回复问题的评论数+1
             question.setCommentCount(1);
             questionExtendMapper.incCommentCount(question);
         }
@@ -71,13 +77,13 @@ public class CommentService {
     /**
      * 获取评论
      * **/
-    public List<CommentRespDTO> listByQuestionId(Long id) {
+    public List<CommentRespDTO> listByTargetId(Long id, CommentTypeEnum type) {
 
         //通过评论parentId和评论类型type获取所有评论
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                 .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                .andTypeEqualTo(type.getType());
         //将评论按照创建时间降序排序
         commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);

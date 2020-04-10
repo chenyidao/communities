@@ -2,6 +2,7 @@ package com.community.cyd.controller;
 
 import com.community.cyd.dto.CommentRespDTO;
 import com.community.cyd.dto.QuestionDTO;
+import com.community.cyd.enums.CommentTypeEnum;
 import com.community.cyd.service.CommentService;
 import com.community.cyd.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class QuestionController {
                                  Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
 
-        //获取comment评论
-        List<CommentRespDTO> comments = commentService.listByQuestionId(id);
+        //获取问题的comment评论
+        List<CommentRespDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
 
         model.addAttribute("comments", comments);
         model.addAttribute("question", questionDTO);

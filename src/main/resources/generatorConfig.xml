@@ -79,15 +79,9 @@
 
         <!-- 要生成的表  tableName是数据库中的表名或视图名  domainObjectName是实体类名-->
         <!-- 多个实体类复制多份该配置即可 -->
-        <table tableName="user" domainObjectName="User">
-            <!--<property name="useActualColumnNames" value="true"/>   &lt;!&ndash;转换位驼峰标识&ndash;&gt;
-            <generatedKey column="ID" sqlStatement="DB2" identity="true" />
-            <columnOverride column="DATE_FIELD" property="startDate" />
-            <ignoreColumn column="FRED" />
-            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
-        </table>
+        <table tableName="user" domainObjectName="User"></table>
         <table tableName="question" domainObjectName="Question"></table>
         <table tableName="comment" domainObjectName="Comment"></table>
-
+        
     </context>
 </generatorConfiguration>
