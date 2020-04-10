@@ -36,4 +36,8 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
+  <!--通过tag找关联问题-->
+  <select id="selectRelatedByTag" parameterType="com.community.cyd.model.Question" resultMap="BaseResultMap">
+    select * from QUESTION where id != #{id} and tag regexp #{tag}
+  </select>
 </mapper>

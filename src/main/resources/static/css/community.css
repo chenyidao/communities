@@ -96,3 +96,12 @@ body {
 .question-tag {
     margin-right: 5px;
 }
+
+/*相关问题*/
+.question-related {
+    line-height: 20px;
+    font-size: 12px;
+    margin-left: 0px;
+    padding-left: 0px;
+    list-style: none;
+}

@@ -10,13 +10,16 @@ import com.community.cyd.mapper.UserMapper;
 import com.community.cyd.model.Question;
 import com.community.cyd.model.QuestionExample;
 import com.community.cyd.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -132,5 +135,28 @@ public class QuestionService {
         question.setId(id);         //因为每次通过id只更新viewCount，所以不需要赋其他属性的值。
         question.setViewCount(1);   //递增步长为1
         questionExtendMapper.incViewCount(question);
+    }
+
+    /**
+     * 通过tag获取关联问题
+     * */
+    public List<QuestionDTO> selectRelatedByTag(QuestionDTO queryDTO) {
+        if (StringUtils.isBlank(queryDTO.getTag())) {
+            return new ArrayList<>();
+        }
+        String[] tags = StringUtils.split(queryDTO.getTag(), ',');
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questions = questionExtendMapper.selectRelatedByTag(question);
+
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 }
