@@ -105,3 +105,14 @@ body {
     padding-left: 0px;
     list-style: none;
 }
+
+/*展示标签*/
+.publish-tag-tab {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.publish-tag-tab .label-info {
+    white-space: normal;
+}

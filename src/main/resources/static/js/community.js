@@ -59,7 +59,7 @@ function post() {
  * **/
 function comment(e) {
     var id = e.getAttribute("data-id");
-    var content = $("#input-"+id).val();
+    var content = $("#input-" + id).val();
     comment2reply(id, 2, content);
 }
 
@@ -121,7 +121,7 @@ function collapse(e) {
                     }).append($("<spann/>", {
                         "class": "menu-comment-time",
                         html: moment(comment.gmtCreate).format("YYYY-MM-DD,hh:mm:ss")
-                }));
+                    }));
                     var mediaBody = $("<div/>", {
                         "class": "media-body"
                     }).append(mediaHead).append(mediaContent).append(mediaMenu);
@@ -144,4 +144,22 @@ function collapse(e) {
             });
         }
     }
+}
+
+/*选择标签*/
+function selectTag(e) {
+    var value = e.getAttribute("data-tag")
+    var previous = $("#tag").val();
+    if (previous.indexOf(value) == -1) {
+        if (previous) {
+            $("#tag").val(previous + ',' + value);
+        } else {
+            $("#tag").val(value);
+        }
+    }
+}
+
+/*展示标签*/
+function showSelectTag() {
+    $("#select-tag").show();
 }

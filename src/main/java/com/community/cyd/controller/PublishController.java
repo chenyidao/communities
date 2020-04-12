@@ -1,9 +1,11 @@
 package com.community.cyd.controller;
 
+import com.community.cyd.cache.TagCache;
 import com.community.cyd.dto.QuestionDTO;
 import com.community.cyd.model.Question;
 import com.community.cyd.model.User;
 import com.community.cyd.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,11 +36,13 @@ public class PublishController {
         model.addAttribute("description", questionDTO.getDescription());
         model.addAttribute("title", questionDTO.getTitle());
         model.addAttribute("id", id); //用于之后前端传回
+        model.addAttribute("tags", TagCache.getTags());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.getTags());
         return "publish";
     }
 
@@ -61,6 +65,7 @@ public class PublishController {
         model.addAttribute("tag", tag);
         model.addAttribute("description", description);
         model.addAttribute("title", title);
+        model.addAttribute("tags", TagCache.getTags());
 
         if (user == null) {
             model.addAttribute("error", "用户未登录");
@@ -76,6 +81,11 @@ public class PublishController {
         }
         if (tag == null || tag == "") {
             model.addAttribute("error", "标签不能为空");
+            return "publish";
+        }
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)) {
+            model.addAttribute("error", "输入非法标签："+invalid);
             return "publish";
         }
 
