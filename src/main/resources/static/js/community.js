@@ -1,4 +1,13 @@
 /**
+ * 提交问题回复
+ * **/
+function post() {
+    var questionId = $("#question_id").val();
+    var content = $("#comment_content").val();
+    comment2reply(questionId, 1, content);
+}
+
+/**
  * 重构关键方法
  * **/
 function comment2reply(id, type, content) {
@@ -42,16 +51,6 @@ function comment2reply(id, type, content) {
         },
         dataType: "json "
     });
-}
-
-/**
- * 提交问题回复
- * **/
-function post() {
-    var questionId = $("#question_id").val();
-    var content = $("#comment_content").val();
-    console.log(content);
-    comment2reply(questionId, 1, content);
 }
 
 /**

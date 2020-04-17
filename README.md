@@ -20,6 +20,8 @@
 [JQuery API文档](https://api.jquery.com/)  
 [common lang](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.9)  
 [Moment.js—JavaScript 日期处理类库](http://momentjs.cn/)  
+[富文本编辑](http://editor.md.ipandao.com/)  
+[MarkdownToHtml](https://github.com/pandao/editor.md)  
 ## 插件
 [Flyway](https://flywaydb.org/getstarted/firststeps/maven)  
 [Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  
@@ -58,8 +60,8 @@ from table_name
 ```
 
 ``` bash
-mvn flyway:migrate
-mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+mvn flyway:migrate   //将更新的脚本同步到数据库
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate   //do的创建
 ```
 
 ```
