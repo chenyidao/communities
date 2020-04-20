@@ -58,7 +58,7 @@ public class QuestionService {
      * 获取question集合 重构核心函数
      **/
     public PaginationDTO getQuestionList(Integer totalCount, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         Integer totalPage;
 
         if (totalCount % size == 0) {
@@ -81,14 +81,14 @@ public class QuestionService {
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //通过question表中的主键id(问题序号)对应 User中id获取user，然后获取头像地址
-        for (Question question : questionList) {
-            User user = userMapper.selectByPrimaryKey(question.getCreator());
+        List<QuestionDTO> questionDTOS = questionList.stream().map(q -> {
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO); //将question属性复制到questionDTO，用于参数传输
+            User user = userMapper.selectByPrimaryKey(q.getCreator());
+            BeanUtils.copyProperties(q, questionDTO);
             questionDTO.setUser(user);
-            questionDTOList.add(questionDTO);
-        }
-        paginationDTO.setQuestions(questionDTOList);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        paginationDTO.setData(questionDTOS);
         return paginationDTO;
     }
 

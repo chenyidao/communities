@@ -25,4 +25,5 @@ public enum CommentTypeEnum {
     CommentTypeEnum(Integer type) {
         this.type = type;
     }
+
 }

@@ -3,6 +3,10 @@ package com.community.cyd.dto;
 import com.community.cyd.model.User;
 import lombok.Data;
 
+/**
+ * 问题DTO
+**/
+
 @Data
 public class QuestionDTO {
     private Long id;

@@ -7,10 +7,11 @@ import java.util.List;
 
 /**
  * 分页
+ * List是一个泛型列表，涉及到分页的都返回PaginationDTO列表
  * **/
 @Data
-public class PaginationDTO {
-    private List<QuestionDTO> questions;
+public class PaginationDTO<T> {
+    private List<T> data;
     private boolean showPrevious;  //上一页按钮 <
     private boolean showFirstPage; //第一页按钮 <<
     private boolean showNext; //下一页按钮 >
