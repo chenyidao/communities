@@ -1,11 +1,11 @@
 package com.community.cyd.interceptor;
 
 import com.community.cyd.model.User;
+import com.community.cyd.service.NotificationService;
 import com.community.cyd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +36,12 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService;
+    /**
+     * 存储登录状态以及未读数
+     *
+     * */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -45,20 +51,15 @@ public class LoginInterceptor implements HandlerInterceptor {
                     String value = cookie.getValue();
                     User user = userService.findByToken(value);
                     if (user != null) {
+                        //将登录用户信息和未读数保存到session中，用于页面显示，因为未读数由navigation和profile共有属性
                         request.getSession().setAttribute("user", user);
+                        Long unreadCount = notificationService.unreadCount(user.getId());
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                         break;
                     }
                 }
             }
         }
         return true;
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
     }
 }

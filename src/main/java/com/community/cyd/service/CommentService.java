@@ -40,7 +40,7 @@ public class CommentService {
     private NotificationMapper notificationMapper;
 
     /**
-     * 插入评论
+     * 插入评论与通知
      **/
     @Transactional
     public void insert(Comment comment, User commentator) {   //因为正在登陆的人进行评论，所以notifier应该是目前的user
@@ -73,7 +73,7 @@ public class CommentService {
             commentExtendMapper.incCommentCount(dbComment);
 
             //添加通知
-            CreatNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT);
+            CreatNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT,question.getId());
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -87,20 +87,20 @@ public class CommentService {
             questionExtendMapper.incCommentCount(question);
 
             //创建通知
-            CreatNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION);
+            CreatNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION,question.getId());
         }
     }
 
     /**
      * 创建回复通知重构函数
      */
-    private void CreatNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationTypeEnum) {
+    private void CreatNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationTypeEnum,Long outerId) {
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(notificationTypeEnum.getType());  //回复类型
         notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());   //回复状态
         notification.setNotifier(comment.getCommentator());      //评论者
-        notification.setOuterId(comment.getParentId());          //被评论的评论id
+        notification.setOuterId(outerId);          //被评论的问题id
         notification.setReceive(receiver);     //被评论者
         notification.setNotifierName(notifierName);   //评论人的名字
         notification.setOuterTitle(outerTitle);

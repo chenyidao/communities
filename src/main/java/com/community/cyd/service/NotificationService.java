@@ -2,6 +2,7 @@ package com.community.cyd.service;
 
 import com.community.cyd.dto.NotificationDTO;
 import com.community.cyd.dto.PaginationDTO;
+import com.community.cyd.enums.NotificationStatusEnum;
 import com.community.cyd.enums.NotificationTypeEnum;
 import com.community.cyd.exception.CustomizeErrorCode;
 import com.community.cyd.exception.CustomizeException;
@@ -18,14 +19,16 @@ import java.util.stream.Collectors;
 
 /**
  * 通知业务
- * */
+ */
 @Service
 public class NotificationService {
 
     @Autowired
     private NotificationMapper notificationMapper;
 
-    /*获取带通知的list*/
+    /**
+     * 获取带通知的分页列表
+     * */
     public PaginationDTO getListByUserId(Long userId, Integer page, Integer size) {
 
         PaginationDTO<NotificationDTO> paginationDTO = new PaginationDTO<>();
@@ -60,7 +63,8 @@ public class NotificationService {
         List<NotificationDTO> notificationDTOS = notifications.stream().map(n -> {
             NotificationDTO notificationDTO = new NotificationDTO();
             BeanUtils.copyProperties(n, notificationDTO);
-            notificationDTO.setType(NotificationTypeEnum.nameOfType(n.getType()));
+            //设置通知类型的名字
+            notificationDTO.setTypeName(NotificationTypeEnum.nameOfType(n.getType()));
             return notificationDTO;
         }).collect(Collectors.toList());
         paginationDTO.setData(notificationDTOS);
@@ -68,28 +72,40 @@ public class NotificationService {
     }
 
     /**
-     * 获取未读通知数
-     * */
+     * 获取未读通知数（status = 0）
+     */
     public Long unreadCount(Long userId) {
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria()
-                .andReceiveEqualTo(userId);
+                .andReceiveEqualTo(userId)
+                .andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
         return notificationMapper.countByExample(notificationExample);
     }
 
     /**
-     * 在最新回复列表点击问题时跳转
-     * */
-    /*public NotificationDTO read(Long id, User user) {
+     * 更新通知状态
+     */
+    public NotificationDTO read(Long id, User user) {
         Notification notification = notificationMapper.selectByPrimaryKey(id);
-        if (notification == null){
-            throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
-        }
-        if (!Objects.equals(notification.getReceive(), user.getId())){
-            throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
-        }
 
-        return new NotificationDTO();
-    }*/
+        /*通知未找到*/
+        if (notification == null) {
+            throw new CustomizeException(CustomizeErrorCode.NOTIFICATION_NOT_FOUND);
+        }
+        /*判断当前登录的用户，是否是被通知的用户*/
+        if (!Objects.equals(notification.getReceive(), user.getId())) {
+            throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
+        }
+        /*点击通知后，status变成已读*/
+        notification.setStatus(NotificationStatusEnum.READ.getStatus());
+        notificationMapper.updateByPrimaryKey(notification);
+
+        /*返回相应的通知DTO*/
+        NotificationDTO notificationDTO = new NotificationDTO();
+        BeanUtils.copyProperties(notification, notificationDTO);
+        notificationDTO.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
+        return notificationDTO;
+
+    }
 }
 
