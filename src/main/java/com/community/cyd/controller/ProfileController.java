@@ -32,7 +32,6 @@ public class ProfileController {
                           @RequestParam(name = "size", defaultValue = "5") Integer size) {
         //获取user（如果未登录则被拦截）
         User user = (User) request.getSession().getAttribute("user");
-
         //如果未登陆，即拦截器中没有添加user session，则不能访问profile，并跳回首页。
         if (user == null) {
             return "redirect:/";

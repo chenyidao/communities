@@ -18,10 +18,7 @@
 [html转译与反转译](https://www.sojson.com/rehtml)  
 [ErrorHandler错误处理机制](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-error-handling)  
 [JQuery API文档](https://api.jquery.com/)  
-[common lang](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.9)  
-[Moment.js—JavaScript 日期处理类库](http://momentjs.cn/)  
-[富文本编辑](http://editor.md.ipandao.com/)  
-[MarkdownToHtml](https://github.com/pandao/editor.md)  
+
 ## 插件
 [Flyway](https://flywaydb.org/getstarted/firststeps/maven)  
 [Flyway简单实例](http://ju.outofmemory.cn/entry/339528)  
@@ -29,7 +26,11 @@
 [Lombok](https://projectlombok.org/features/all)  
 [IDEA热部署Automatic Restart](https://www.cnblogs.com/ming-blogs/p/10289075.html)(清除浏览器缓存：ctrl+shift+delete)  
 [Mybatis Generator](http://mybatis.org/generator/configreference/xmlconfig.html)  
-[Mybatis Generator分页插件](http://mybatis.org/generator/reference/plugins.html)
+[Mybatis Generator分页插件](http://mybatis.org/generator/reference/plugins.html)  
+[common lang](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.9)  
+[Moment.js—JavaScript 日期处理类库](http://momentjs.cn/)  
+[Markdown插件](http://editor.md.ipandao.com/)  
+[MarkdownToHtml](https://github.com/pandao/editor.md)  
 
 ## 所用工具
 [okHttp](https://square.github.io/okhttp/)  
