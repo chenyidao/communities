@@ -12,7 +12,6 @@ import com.community.cyd.model.Question;
 import com.community.cyd.model.QuestionExample;
 import com.community.cyd.model.User;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,7 +76,6 @@ public class QuestionService {
         Integer totalCount = queryDTO.getTotalCount();
         Integer size = queryDTO.getSize();
         Integer page = queryDTO.getPage();
-
 
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
