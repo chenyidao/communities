@@ -2,6 +2,7 @@ package com.community.cyd.service;
 
 import com.community.cyd.dto.PaginationDTO;
 import com.community.cyd.dto.QuestionDTO;
+import com.community.cyd.dto.QuestionQueryDTO;
 import com.community.cyd.exception.CustomizeErrorCode;
 import com.community.cyd.exception.CustomizeException;
 import com.community.cyd.mapper.QuestionExtendMapper;
@@ -35,10 +36,19 @@ public class QuestionService {
      * 获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
      **/
 
-    public PaginationDTO questionList(Integer page, Integer size) {
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
-
-        PaginationDTO paginationDTO = getQuestionList(totalCount, page, size);
+    public PaginationDTO questionList(Integer page, Integer size, String search) {
+        if (StringUtils.isNotBlank(search)) {
+            String[] searchArray = StringUtils.split(search, " ");
+            search = Arrays.stream(searchArray).collect(Collectors.joining("|"));
+        }
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setPage(page);
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setSearch(search);
+        //通过search条件筛选总条数
+        Integer totalCount = questionExtendMapper.countBySearch(questionQueryDTO);
+        questionQueryDTO.setTotalCount(totalCount);
+        PaginationDTO paginationDTO = getQuestionList(questionQueryDTO);
         return paginationDTO;
     }
 
@@ -50,16 +60,24 @@ public class QuestionService {
         questionExample.createCriteria()
                 .andCreatorEqualTo(userId);
         Integer totalCount = (int) questionMapper.countByExample(questionExample);
-        PaginationDTO paginationDTO = getQuestionList(totalCount, page, size);
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setPage(page);
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setTotalCount(totalCount);
+        PaginationDTO paginationDTO = getQuestionList(questionQueryDTO);
         return paginationDTO;
     }
 
     /**
      * 获取question集合 重构核心函数
      **/
-    public PaginationDTO getQuestionList(Integer totalCount, Integer page, Integer size) {
+    public PaginationDTO getQuestionList(QuestionQueryDTO queryDTO) {
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         Integer totalPage;
+        Integer totalCount = queryDTO.getTotalCount();
+        Integer size = queryDTO.getSize();
+        Integer page = queryDTO.getPage();
+
 
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -74,12 +92,9 @@ public class QuestionService {
         }
         paginationDTO.setPaginationDTO(totalPage, page); //设置返回前端显示的内容
 
-        //问题：当page < 0 时 以及 page > totalPage时 查询不到questionList ???
         Integer offset = size * (page - 1);    //select * from question limit offset,size 获取偏移量
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        queryDTO.setPage(offset);  //到这里page已经没用了，索性将page的值设置为offset，用于分页
+        List<Question> questionList = questionExtendMapper.selectBySearch(queryDTO);
         //通过question表中的主键id(问题序号)对应 User中id获取user，然后获取头像地址
         List<QuestionDTO> questionDTOS = questionList.stream().map(q -> {
             QuestionDTO questionDTO = new QuestionDTO();
@@ -139,7 +154,7 @@ public class QuestionService {
 
     /**
      * 通过tag获取关联问题
-     * */
+     */
     public List<QuestionDTO> selectRelatedByTag(QuestionDTO queryDTO) {
         if (StringUtils.isBlank(queryDTO.getTag())) {
             return new ArrayList<>();
