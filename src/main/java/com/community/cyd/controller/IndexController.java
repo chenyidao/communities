@@ -27,6 +27,7 @@ public class IndexController {
                         @RequestParam(name = "search", required = false) String search) {   //page 页号   size 每页大小
         PaginationDTO paginationDTO = questionService.questionList(page, size,search);   //获取问题列表
         model.addAttribute("pagination", paginationDTO);
+        model.addAttribute("search", search); //当点击时上下页索引时，还是显示满足search条件的问题
         return "index";
     }
 }
