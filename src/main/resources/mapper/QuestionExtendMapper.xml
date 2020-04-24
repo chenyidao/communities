@@ -41,23 +41,29 @@
     select * from QUESTION where id != #{id} and tag regexp #{tag}
   </select>
 
-  <!--通过search找符合条件问题个数-->
+  <!--通过search和tag找符合条件问题个数-->
   <select id="countBySearch" parameterType="com.community.cyd.dto.QuestionQueryDTO" resultType="java.lang.Integer">
     select count(*) from QUESTION
     <where>
-        <if test="search != null">
-         and title regexp #{search}
+        <if test="search != null and search != ''">
+            and title regexp #{search}
+        </if>
+        <if test="tag != null and tag != '' ">
+            and tag regexp #{tag}
         </if>
      </where>
   </select>
 
-  <!--通过search找符合条件问题-->
+  <!--通过search和tag找符合条件问题-->
   <select id="selectBySearch" parameterType="com.community.cyd.dto.QuestionQueryDTO" resultMap="BaseResultMap">
     select * from QUESTION
     <where>
-      <if test="search != null">
-        and title regexp #{search}
-      </if>
+        <if test="search != null and search != ''">
+            and title regexp #{search}
+        </if>
+        <if test="tag != null and tag != '' ">
+            and tag regexp #{tag}
+        </if>
     </where>
     order by gmt_create desc limit #{page},#{size}
   </select>

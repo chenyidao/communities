@@ -8,4 +8,5 @@ public class QuestionQueryDTO {
     private Integer size;
     private Integer totalCount;
     private String search;
+    private String tag;
 }

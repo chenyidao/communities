@@ -35,7 +35,7 @@ public class QuestionService {
      * 获取question集合，以用于前端展示问题信息（发起人、关注人数、回复数、浏览数等等），并分页
      **/
 
-    public PaginationDTO questionList(Integer page, Integer size, String search) {
+    public PaginationDTO questionList(Integer page, String tag, Integer size, String search) {
         if (StringUtils.isNotBlank(search)) {
             String[] searchArray = StringUtils.split(search, " ");
             search = Arrays.stream(searchArray).collect(Collectors.joining("|"));
@@ -44,6 +44,7 @@ public class QuestionService {
         questionQueryDTO.setPage(page);
         questionQueryDTO.setSize(size);
         questionQueryDTO.setSearch(search);
+        questionQueryDTO.setTag(tag);
         //通过search条件筛选总条数
         Integer totalCount = questionExtendMapper.countBySearch(questionQueryDTO);
         questionQueryDTO.setTotalCount(totalCount);
