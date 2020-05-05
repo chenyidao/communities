@@ -27,7 +27,7 @@ public class HotTagTasks {
     public void reportCurrentTime() {
         int offset = 0;
         int limit = 20;
-        log.info("hotTagSchedule start {}", new Date());
+//        log.info("hotTagSchedule start {}", new Date());
 
         List<Question> list = new ArrayList<>();
         Map<String, Integer> priorities = new HashMap<>();
@@ -51,6 +51,6 @@ public class HotTagTasks {
         }
         //获取top3
         hotTagCache.updateTags(priorities);
-        log.info("hotTagSchedule stop {}", new Date());
+//        log.info("hotTagSchedule stop {}", new Date());
     }
 }

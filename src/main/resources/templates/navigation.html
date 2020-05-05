@@ -24,6 +24,9 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${session.user != null}">
+                        <a href="/consult">付费咨询</a>
+                    </li>
+                    <li th:if="${session.user != null}">
                         <a href="/publish">发布</a>
                     </li>
                     <li><a href="/profile/replies">通知<span class="badge" th:text="${session.unreadCount}"></span></a></li>
