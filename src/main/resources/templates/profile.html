@@ -19,6 +19,7 @@
         <div class="col-lg-9 col-md-12 col-sm-12">
             <h2><span th:text="${sectionName}"></span></h2>
             <hr>
+            <!--问题部分-->
             <div class="media" th:each="question : ${pagination.data}" th:if="${section == 'questions'}">
                 <div class="media-left">
                     <a href="#">
@@ -40,6 +41,7 @@
                     </a>
                 </div>
             </div>
+            <!--回复部分-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section == 'replies'}">
                 <div class="media" th:each="notification : ${pagination.data}">
                     <div class="media-body">

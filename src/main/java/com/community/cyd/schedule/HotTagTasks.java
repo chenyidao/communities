@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ * 使用定时器schedule实现热点问题
+ * */
 @Component
 @Log4j2
 public class HotTagTasks {
@@ -23,6 +26,9 @@ public class HotTagTasks {
     @Autowired
     private HotTagCache hotTagCache;
 
+    /**
+     * 定时器
+     * */
     @Scheduled(fixedRate = 20000)
     public void reportCurrentTime() {
         int offset = 0;
@@ -51,6 +57,5 @@ public class HotTagTasks {
         }
         //获取top3
         hotTagCache.updateTags(priorities);
-//        log.info("hotTagSchedule stop {}", new Date());
     }
 }

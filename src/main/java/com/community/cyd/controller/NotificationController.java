@@ -23,7 +23,7 @@ public class NotificationController {
     /**
      * 点击通知列表中的问题时跳转
      */
-    @GetMapping("/profile/{id}")
+    @GetMapping("/notification/{id}")
     public String profile(@PathVariable(name = "id") Long id, HttpServletRequest request) {
         //获取user（如果未登录则被拦截）
         User user = (User) request.getSession().getAttribute("user");

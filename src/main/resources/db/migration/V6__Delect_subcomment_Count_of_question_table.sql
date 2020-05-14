@@ -1,1 +1,0 @@
-alter table QUESTION drop column SUBCOMMENT_COUNT;

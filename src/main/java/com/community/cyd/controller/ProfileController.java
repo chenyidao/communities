@@ -58,4 +58,16 @@ public class ProfileController {
         model.addAttribute("pagination", paginationDTO);
         return "profile";
     }
+
+    /*个人信息*/
+    @GetMapping("/profile/user")
+    public String getUser(HttpServletRequest request) {
+        //获取user（如果未登录则被拦截）
+        User user = (User) request.getSession().getAttribute("user");
+        //如果未登陆，即拦截器中没有添加user session，则不能访问profile，并跳回首页。
+        if (user == null) {
+            return "redirect:/";
+        }
+        return "user";
+    }
 }

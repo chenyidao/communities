@@ -5,11 +5,17 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.community.cyd.model.Consult;
+import com.community.cyd.model.Payment;
+import com.community.cyd.model.User;
+import com.community.cyd.service.ConsultService;
+import com.community.cyd.service.PaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
-public class PayController {
+public class PaymentController {
     private final String APP_ID = "2016102400749154";
     private final String APP_PRIVATE_KEY = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCMer++XD1yxjaPIvRUoRQZCDg/JthcAZulQXtCHbtL9AGNomG7L/gxsVayoptkh88GqAbfMdiji1p1Npam3LllZBeQum0Le+BkJ2QkHW96X+aI0WyrlLa/aND4dLNzRMb4WftEvQJ/kzQ/ckFI/7uOd0JjNCzJQmEbvFkPqKpAYNshtA3Ofv7I3TsDwyOCeaNyPk+C4Q8YgL7uPnp7xlAz0wb/QXDIvj9HYLeJsstoa/Trprn7KJQltg+4EZz3pndXm3xpBhn64puFprFxjAIVLyu+2JiBF0uttze3ZQ3jjdbo7hfP5r7vjw6DGjyEHSBIHYeyJp/JEakXWdjfkL1fAgMBAAECggEAVZPhgyHF/Ulqqz/sADIwgB9VxILxgvsnykBdyiU6mEaJO7MUPmg2lm8mFaShbViecbuilA1VoCuga49Zr0T/XBjhkjU/gKNySxEEHEwiQTZyxh5uSQhLW8eKphDR0QKxA1Itk+5guz79sTj1NHc11tAoDS8XqXNanP7ccoGZVaXDp4LwJleDIiPmgz8zNXuOdxvbMKP5stSuR0kaR4dXopAhrspW305eJ8nOvQlDz4QzzoLHSika08cQIOtWlY1f909ZPIoHfLCvwg7qiWCAM2GjtVlgrmmuSHS6AgS+3nnlyaurtoYknVgQyR3R/kUTto+cUcJEU1Z25XFRdtTCAQKBgQDMRpO4o2EfnI4E/gEJzNVCfreUwioxMoIJVPDvvPAUPPIWBHbZzJPNbCaGVsyVQbnvkTOzeAfjsNzpCENbTjJRK28P97OPZBavrwM5QE8dO+vjzpNB6c1PTzZ053vhqyhAotfjOwsQjRalrDKA6z2y0TJ5ADozcFvgy8h3q9KkHwKBgQCwDNEhrubsN7qzX5GvfmcUHcE+w31fe8SvUKtulD/jAJnd+xlYrHecx0xph+YuMe3w0SKUV/vnFSQFNxsuIzVgfk4fXnMddj9JT3ptfrQFrghsSg9izRW8IYrTPEJScSB81T+lFqD6DTw5VJfKmeEH30mHY6CD6Eyo2bY34Yy+wQKBgQCsThvscmNKNtPUgix+B7kbDafsYpsURHZLSMqybbxUVdQdnkZiEJ3beI5GYpDOlVIxMVla2LRO6rBsH/ww2BS5Qtm7rkRXfyVjq0wczpHtJs4iqeysfHohm79jfJ6SC704SCOyF+uNWnTv6f/vnn28h5j7V6XAHdZiF4JQ7y4OIQKBgHCFEJlFr2Qkzlhc6cFPudQanGtgCN6hPXmLxrYbXKXauX0uQunw+VYj70u3xz+ZO+nh0QcdIOx2D5qhuOaJLFFrCMV12X9oF1TkzmvzQl4q+Ek2IJVWXODsU01lQ0Jr+YavyUjbqLGJCgfecFHWfgRJCzbUT0BflbeJxrP6nblBAoGAIO4PJEqgUdhHIJXzrHbvOaGgMzpH7WHHxAKE5KJO/sgw2kE3ivbBmFkhTQUesb+FlYPbn2DwvM7orIP5xBdEWw65tvrLWXpwM+jQzsVUw+5t0/J3Rn1KVxm699kYp6Bb18Guz2dDQIHDRAKVjTW8oXfJ8CrBCrxCvPjvjWGxe7Y=";
     private final String CHARSET = "UTF-8";
@@ -32,31 +38,40 @@ public class PayController {
     //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
     private final String RETURN_URL = "http://127.0.0.1:8887/returnUrl";
 
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private ConsultService consultService;
+
     /**
      * 发起支付
-     * */
+     */
+    @Transactional
     @RequestMapping(value = "/alipay", method = RequestMethod.GET)
     public void alipay(HttpServletResponse httpResponse,
-                       @RequestParam(name = "no", required = false) String no,
-                       @RequestParam(name = "amount", defaultValue = "0") Long amount,
-                       @RequestParam(name = "subject", required = false) String sub,
-                       @RequestParam(name = "desc", required = false) String desc
-    ) throws IOException {
+                       @RequestParam(name = "consultantId") Long consultantId,
+                       @RequestParam(name = "consulteeId") Long consulteeId,
+                       @RequestParam(name = "consultFee", defaultValue = "0") Long amount,
+                       @RequestParam(name = "content", required = false) String content
+    )
+            throws IOException {
         //实例化客户端,填入所需参数
         AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, APP_ID, APP_PRIVATE_KEY, FORMAT, CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE);
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         //在公共参数中设置回跳和通知地址
-        request.setReturnUrl(RETURN_URL);
+        request.setReturnUrl(RETURN_URL + "?userId=" + consulteeId);
         request.setNotifyUrl(NOTIFY_URL);
 
         //商户订单号，商户网站订单系统中唯一订单号，必填
+        String no = UUID.randomUUID().toString();
         String out_trade_no = no;
         //付款金额，必填
         String total_amount = Long.toString(amount);
         //订单名称，必填
-        String subject = sub;
+        String subject = "咨询" + consultantId;
         //商品描述，可空
-        String body = desc;
+        String body = consulteeId + "对" + consultantId + "的咨询";
         request.setBizContent("{\"out_trade_no\":\"" + out_trade_no + "\","
                 + "\"total_amount\":\"" + total_amount + "\","
                 + "\"subject\":\"" + subject + "\","
@@ -68,18 +83,30 @@ public class PayController {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+
         httpResponse.setContentType("text/html;charset=" + CHARSET);
         httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
         httpResponse.getWriter().flush();
         httpResponse.getWriter().close();
+
+        //添加consult记录
+        Consult consult = new Consult();
+        consult.setConsultee(consulteeId);
+        consult.setConsultant(consultantId);
+        consult.setContent(content);
+        consult.setFee(total_amount);
+        consult.setGmtCreate(System.currentTimeMillis());
+        consultService.insertRecord(consult);
     }
 
     /**
      * 支付成功后回调地址
-     * */
+     */
+    @Transactional
     @RequestMapping(value = "/returnUrl", method = RequestMethod.GET)
-    @ResponseBody
-    public String returnUrl(HttpServletRequest request, HttpServletResponse response)
+    public String returnUrl(HttpServletRequest request,
+                            @RequestParam(name = "userId") Long userId
+                            )
             throws IOException, AlipayApiException {
         System.out.println("=================================同步回调=====================================");
 
@@ -98,7 +125,7 @@ public class PayController {
             params.put(name, valueStr);
         }
 
-        System.out.println(params);//查看参数都有哪些
+//        System.out.println(params);//查看参数都有哪些
         boolean signVerified = AlipaySignature.rsaCheckV1(params, ALIPAY_PUBLIC_KEY, CHARSET, SIGN_TYPE); // 调用SDK验证签名
         //验证签名通过
         if (signVerified) {
@@ -111,16 +138,25 @@ public class PayController {
             // 付款金额
             String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
 
-            System.out.println("商户订单号=" + out_trade_no);
+            /*System.out.println("商户订单号=" + out_trade_no);
             System.out.println("支付宝交易号=" + trade_no);
-            System.out.println("付款金额=" + total_amount);
-
+            System.out.println("付款金额=" + total_amount);*/
+            Payment payment = new Payment();
+            //如果未登陆，即拦截器中没有添加user session，则不能访问profile，并跳回首页。
+            if (userId == null) {
+                return "redirect:/";
+            }
+            payment.setUserId(userId);
+            payment.setOutTradeNo(out_trade_no);
+            payment.setTradeNo(trade_no);
+            payment.setTotalAmount(total_amount);
+            payment.setGmtCreate(System.currentTimeMillis());
             //支付成功，修复支付状态
-//            payService.updateById(Integer.valueOf(out_trade_no));
+            paymentService.insertRecord(payment);
+
             return "ok";//跳转付款成功页面
         } else {
             return "no";//跳转付款失败页面
         }
-
     }
 }

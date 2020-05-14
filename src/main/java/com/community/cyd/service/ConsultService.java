@@ -1,7 +1,9 @@
 package com.community.cyd.service;
 
 import com.community.cyd.dto.ConsultDTO;
+import com.community.cyd.mapper.ConsultMapper;
 import com.community.cyd.mapper.UserMapper;
+import com.community.cyd.model.Consult;
 import com.community.cyd.model.User;
 import com.community.cyd.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +18,27 @@ public class ConsultService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<ConsultDTO> getConsult() {
-        List<User> users = userMapper.selectByExample(new UserExample());
+    @Autowired
+    private ConsultMapper consultMapper;
+
+    /*获取可咨询用户列表*/
+    public List<ConsultDTO> getConsultList(Long userId) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andIdNotEqualTo(userId);
+        List<User> users = userMapper.selectByExample(userExample);
         List<ConsultDTO> dtoList = new LinkedList<>();
-        for (User user : users) {
+        for (int i = 0; i < users.size(); i++) {
             ConsultDTO consultDTO = new ConsultDTO();
-            consultDTO.setOutTradeNo("no123");
-            consultDTO.setTotal_amount(500L);
-            consultDTO.setSubject("测试订单");
-            consultDTO.setDescription("支付宝沙箱测试订单描述");
-            consultDTO.setUser(user);
+            consultDTO.setConsultFee(500L + i * 10);
+            consultDTO.setUser(users.get(i));
             dtoList.add(consultDTO);
         }
         return dtoList;
+    }
+
+    /*插入咨询记录*/
+    public void insertRecord(Consult consult) {
+        consultMapper.insert(consult);
     }
 }
