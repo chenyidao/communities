@@ -42,4 +42,12 @@ public class UserService {
             userMapper.updateByPrimaryKey(dbUser);
         }
     }
+    /**
+     * 更改个人信息中可编辑部分
+     * */
+    public void update(Long userId,String telephone) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        user.setTelephone(telephone);
+        userMapper.updateByPrimaryKey(user);
+    }
 }

@@ -27,6 +27,7 @@
 
 <div class="container-fluid main">
     <div class="row">
+        <!--左边-->
         <div class="col-lg-9 col-md-12 col-sm-12">
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true">发现</span></h2>
 
@@ -81,13 +82,68 @@
                 </ul>
             </nav>
         </div>
+        <!--右边-->
         <div class="col-lg-3 col-md-12 col-sm-12">
-            <h3>热门问题</h3> <br>
-            <ul th:class="question-related">
-                <li th:each="hot : ${hots}">
-                    <a th:href="@{/(page=1,search=${search},tag=${hot})}" th:text="${hot}"></a>
-                </li>
-            </ul>
+            <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12 right">
+                <h3>热门问题</h3> <br>
+                <ul th:class="question-related">
+                    <li th:each="hot : ${hots}">
+                        <a th:href="@{/(page=1,search=${search},tag=${hot})}" th:text="${hot}"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12 right">
+                <h3>经典名句</h3>
+                <ul th:class="question-related">
+                    <li>我与成长，至死方休！</li>
+                </ul>
+            </div>
+
+            <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12 right">
+                <h3>技术链接</h3>
+                <ul th:class="question-related">
+                    <li><a href="https://spring.io/guides">Spring官方</a></li>
+                    <li>
+                        <a href="https://docs.spring.io/spring/docs/5.0.3.RELEASE/spring-framework-reference/">Spring框架文档</a>
+                    </li>
+                    <li>
+                        <a href="https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/">spring-boot文档</a>
+                    </li>
+                    <li><a href="https://elasticsearch.cn/explore">es</a></li>
+                    <li><a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">Github
+                        OAuth</a></li>
+                    <li><a href="https://v3.bootcss.com/getting-started/#download">Bootstrap</a></li>
+                    <li><a href="https://mvnrepository.com">maven资料库</a></li>
+                    <li><a href="https://square.github.io/okhttp/">okHttp</a></li>
+                    <li><a href="https://www.thymeleaf.org/">thymeleaf</a></li>
+                    <li><a href="https://www.cnblogs.com/topwill/p/7434955.html">thymeleaf基本用法</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s/KR2HCcCoIc-gSDLZ69azYw">UML图</a></li>
+                    <li><a href="https://spring.io/guides">Mybatis整合Spring/Springboot</a></li>
+                    <li><a href="http://mybatis.org/spring/index.html">Spring官方</a></li>
+                    <li><a href="http://www.h2database.com/html/quickstart.html">H2</a></li>
+                    <li><a href="https://www.thymeleaf.org/documentation.html">Thymeleaf使用文档</a></li>
+                    <li><a href="https://www.sojson.com/rehtml">html转译与反转译</a></li>
+                    <li>
+                        <a href="https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-error-handling">ErrorHandler错误处理机制</a>
+                    </li>
+                    <li><a href="https://api.jquery.com/">JQuery API文档</a></li>
+                    <li><a href="https://flywaydb.org/getstarted/firststeps/maven">Flyway</a></li>
+                    <li><a href="http://ju.outofmemory.cn/entry/339528">Flyway简单实例</a></li>
+                    <li><a href="https://projectlombok.org/setup/maven">Lombok maven</a></li>
+                    <li><a href="https://projectlombok.org/features/all">Lombok</a></li>
+                    <li><a href="https://www.cnblogs.com/ming-blogs/p/10289075.html">IDEA热部署Automatic Restart</a></li>
+                    <li><a href="http://mybatis.org/generator/configreference/xmlconfig.html">Mybatis Generator</a></li>
+                    <li><a href="http://mybatis.org/generator/reference/plugins.html">Mybatis Generator分页插件</a></li>
+                    <li><a href="https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.9">common
+                        lang</a>
+                    </li>
+                    <li><a href="http://momentjs.cn/">Moment.js—JavaScript 日期处理类库</a></li>
+                    <li><a href="http://editor.md.ipandao.com/">Markdown插件</a></li>
+                    <li><a href="https://github.com/pandao/editor.md">MarkdownToHtml</a></li>
+                    <li><a href="https://square.github.io/okhttp/">okHttp</a></li>
+                    <li><a href="http://jsoneditoronline.org/">json解析工具</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

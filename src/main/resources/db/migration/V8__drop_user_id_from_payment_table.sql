@@ -1,0 +1,1 @@
+alter table PAYMENT drop column USER_ID;

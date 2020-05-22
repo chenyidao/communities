@@ -7,12 +7,12 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.community.cyd.model.Consult;
 import com.community.cyd.model.Payment;
-import com.community.cyd.model.User;
 import com.community.cyd.service.ConsultService;
 import com.community.cyd.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,27 +53,27 @@ public class PaymentController {
                        @RequestParam(name = "consultantId") Long consultantId,
                        @RequestParam(name = "consulteeId") Long consulteeId,
                        @RequestParam(name = "consultFee", defaultValue = "0") Long amount,
-                       @RequestParam(name = "content", required = false) String content
-    )
+                       @RequestParam(name = "content", required = false) String content,
+                       Model model)
             throws IOException {
+
         //实例化客户端,填入所需参数
         AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, APP_ID, APP_PRIVATE_KEY, FORMAT, CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE);
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         //在公共参数中设置回跳和通知地址
-        request.setReturnUrl(RETURN_URL + "?userId=" + consulteeId);
+        request.setReturnUrl(RETURN_URL);
         request.setNotifyUrl(NOTIFY_URL);
 
         //商户订单号，商户网站订单系统中唯一订单号，必填
-        String no = UUID.randomUUID().toString();
-        String out_trade_no = no;
+        String out_trade_no = UUID.randomUUID().toString();
         //付款金额，必填
-        String total_amount = Long.toString(amount);
+        String total_fee = Long.toString(amount);
         //订单名称，必填
         String subject = "咨询" + consultantId;
         //商品描述，可空
         String body = consulteeId + "对" + consultantId + "的咨询";
         request.setBizContent("{\"out_trade_no\":\"" + out_trade_no + "\","
-                + "\"total_amount\":\"" + total_amount + "\","
+                + "\"total_amount\":\"" + total_fee + "\","
                 + "\"subject\":\"" + subject + "\","
                 + "\"body\":\"" + body + "\","
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
@@ -94,7 +94,7 @@ public class PaymentController {
         consult.setConsultee(consulteeId);
         consult.setConsultant(consultantId);
         consult.setContent(content);
-        consult.setFee(total_amount);
+        consult.setFee(total_fee);
         consult.setGmtCreate(System.currentTimeMillis());
         consultService.insertRecord(consult);
     }
@@ -104,12 +104,9 @@ public class PaymentController {
      */
     @Transactional
     @RequestMapping(value = "/returnUrl", method = RequestMethod.GET)
-    public String returnUrl(HttpServletRequest request,
-                            @RequestParam(name = "userId") Long userId
-                            )
+    public String returnUrl(HttpServletRequest request)
             throws IOException, AlipayApiException {
         System.out.println("=================================同步回调=====================================");
-
         // 获取支付宝GET过来反馈信息
         Map<String, String> params = new HashMap<>();
         Map<String, String[]> requestParams = request.getParameterMap();
@@ -124,7 +121,6 @@ public class PaymentController {
             valueStr = new String(valueStr.getBytes("utf-8"), "utf-8");
             params.put(name, valueStr);
         }
-
 //        System.out.println(params);//查看参数都有哪些
         boolean signVerified = AlipaySignature.rsaCheckV1(params, ALIPAY_PUBLIC_KEY, CHARSET, SIGN_TYPE); // 调用SDK验证签名
         //验证签名通过
@@ -137,26 +133,16 @@ public class PaymentController {
 
             // 付款金额
             String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
-
-            /*System.out.println("商户订单号=" + out_trade_no);
-            System.out.println("支付宝交易号=" + trade_no);
-            System.out.println("付款金额=" + total_amount);*/
             Payment payment = new Payment();
-            //如果未登陆，即拦截器中没有添加user session，则不能访问profile，并跳回首页。
-            if (userId == null) {
-                return "redirect:/";
-            }
-            payment.setUserId(userId);
             payment.setOutTradeNo(out_trade_no);
             payment.setTradeNo(trade_no);
             payment.setTotalAmount(total_amount);
             payment.setGmtCreate(System.currentTimeMillis());
             //支付成功，修复支付状态
             paymentService.insertRecord(payment);
-
-            return "ok";//跳转付款成功页面
+            return "redirect:/";//付款成功跳回首页
         } else {
-            return "no";//跳转付款失败页面
+            return "fail";//跳转付款失败页面
         }
     }
 }

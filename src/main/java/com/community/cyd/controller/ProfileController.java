@@ -4,10 +4,13 @@ import com.community.cyd.dto.PaginationDTO;
 import com.community.cyd.model.User;
 import com.community.cyd.service.NotificationService;
 import com.community.cyd.service.QuestionService;
+import com.community.cyd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,9 @@ public class ProfileController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/profile/questions")
     public String profileQuestion(Model model,
@@ -59,15 +65,21 @@ public class ProfileController {
         return "profile";
     }
 
-    /*个人信息*/
+    /**
+     * 获取个人信息
+     * */
     @GetMapping("/profile/user")
-    public String getUser(HttpServletRequest request) {
-        //获取user（如果未登录则被拦截）
-        User user = (User) request.getSession().getAttribute("user");
-        //如果未登陆，即拦截器中没有添加user session，则不能访问profile，并跳回首页。
-        if (user == null) {
-            return "redirect:/";
-        }
-        return "user";
+    public String getInfor() {
+        return "information";
+    }
+
+    /**
+     * 更新个人信息
+     * */
+    @RequestMapping(value = "/update")
+    public String updateInfor(@RequestParam(value = "telephone",required = false) String telephone,
+                              @RequestParam(value = "userId") Long userId) {
+        userService.update(userId,telephone);
+        return "redirect:/";
     }
 }

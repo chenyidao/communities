@@ -16,7 +16,7 @@
 
 <div class="container-fluid main profile">
     <div class="row">
-        <div class="col-lg-9 col-md-12 col-sm-12">
+        <div class="col-lg-9 col-md-12 col-sm-12 left">
             <h2><span th:text="${sectionName}"></span></h2>
             <hr>
             <!--问题部分-->
@@ -88,7 +88,7 @@
                 </nav>
             </div>
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12">
+        <div class="col-lg-3 col-md-12 col-sm-12 right">
             <div class="list-group section">
                 <a href="/profile/questions"
                    th:class="${section=='questions'}? 'active list-group-item':'list-group-item'">我的问题</a>

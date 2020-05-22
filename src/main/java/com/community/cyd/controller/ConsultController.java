@@ -2,7 +2,6 @@ package com.community.cyd.controller;
 
 
 import com.community.cyd.dto.ConsultDTO;
-import com.community.cyd.mapper.UserMapper;
 import com.community.cyd.model.User;
 import com.community.cyd.service.ConsultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,8 @@ import java.util.List;
 
 @Controller
 public class ConsultController {
-
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private ConsultService connsultService;
+    private ConsultService consultService;
 
     /**
      * 咨询接口
@@ -29,7 +24,7 @@ public class ConsultController {
     public String consultList(Model model,
                               HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
-        List<ConsultDTO> consultDTOS = connsultService.getConsultList(user.getId());
+        List<ConsultDTO> consultDTOS = consultService.getConsultList(user.getId());
         model.addAttribute("consultDTOS", consultDTOS);
         return "consultList";
     }

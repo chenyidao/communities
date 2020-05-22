@@ -16,7 +16,7 @@
 <div th:insert="navigation :: nav"></div>
 <div class="container-fluid main">
     <div class="row">
-        <div class="col-xs-12 col-lg-9 col-md-12 col-sm-12">
+        <div class="col-xs-12 col-lg-9 col-md-12 col-sm-12 left">
             <div class="form-group">
                 <form action="/alipay" method="get">
                     <input type="hidden" name="consultantId" th:value="${consultantId}">
@@ -36,7 +36,7 @@
                 </form>
             </div>
         </div>
-        <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+        <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12 right">
             <h3>咨询发起指南</h3> <br>
             1. 输入咨询问题<br>
             2. 点击咨询<br>
